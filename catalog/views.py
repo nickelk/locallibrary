@@ -1,6 +1,8 @@
 from django.shortcuts import render
 
 # Create your views here.
+from django.views import generic
+
 from .models import Book, Author, BookInstance, Genre
 
 
@@ -30,3 +32,12 @@ def index(request):
                  'num_books_word_in_title': num_books_word_in_title,
                  },
     )
+
+
+class BookListView(generic.ListView):
+    model = Book
+    paginate_by = 10
+
+
+class BookDetailView(generic.DetailView):
+    model = Book
