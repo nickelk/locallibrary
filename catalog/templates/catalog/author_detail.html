@@ -11,7 +11,7 @@
 
     {% for book in author.book_set.all %}
     <hr>
-        <p><strong>Title:</strong> {{ book.title }}</p>
+        <p><strong>Title:</strong> <a href="{{ book.get_absolute_url }}">{{ book.title }}</a></p>
         <p><strong>Summary:</strong> {{ book.summary }}</p>
         <p><strong>ISBN:</strong> {{ book.isbn }}</p>
         <p><strong>Language:</strong> {{ book.language }}</p>
