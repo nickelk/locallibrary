@@ -3,17 +3,21 @@
 {% block content %}
     <h1>All Borrowed Books</h1>
 
-    {% if bookinstance_list %}
-    <ul>
+    {% if user.is_staff %}
+        {% if bookinstance_list %}
+        <ul>
 
-      {% for bookinst in bookinstance_list %}
-      <li class="{% if bookinst.is_overdue %}text-danger{% endif %}">
-        <a href="{% url 'book-detail' bookinst.book.pk %}">{{bookinst.book.title}}</a> ({{ bookinst.due_back }})
-      </li>
-      {% endfor %}
-    </ul>
+          {% for bookinst in bookinstance_list %}
+          <li class="{% if bookinst.is_overdue %}text-danger{% endif %}">
+            <a href="{% url 'book-detail' bookinst.book.pk %}">{{bookinst.book.title}}</a> ({{ bookinst.due_back }})-{{ bookinst.borrower }}
+          </li>
+          {% endfor %}
+        </ul>
 
+        {% else %}
+          <p>There are no books borrowed.</p>
+        {% endif %}
     {% else %}
-      <p>There are no books borrowed.</p>
+          <p>You have no permissions to see this page.</p>
     {% endif %}
 {% endblock %}

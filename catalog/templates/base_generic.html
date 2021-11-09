@@ -33,6 +33,9 @@
          {% else %}
              <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
          {% endif %}
+         {% if user.is_staff %}
+             <li><a href="{% url 'all-books-loaned' %}">All Borrowed Books</a></li>
+         {% endif %}
       </ul>
      {% endblock %}
       </div>
