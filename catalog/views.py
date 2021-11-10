@@ -13,6 +13,9 @@ import datetime
 
 from .forms import RenewBookForm
 
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.urls import reverse_lazy
+
 
 def index(request):
     """
@@ -109,11 +112,48 @@ def renew_book_librarian(request, pk):
             book_inst.save()
 
             # redirect to a new URL:
-            return HttpResponseRedirect(reverse('all-books-loaned') )
+            return HttpResponseRedirect(reverse('all-books-loaned'))
 
     # If this is a GET (or any other method) create the default form.
     else:
         proposed_renewal_date = datetime.date.today() + datetime.timedelta(weeks=3)
-        form = RenewBookForm(initial={'renewal_date': proposed_renewal_date,})
+        form = RenewBookForm(initial={'renewal_date': proposed_renewal_date, })
 
-    return render(request, 'catalog/book_renew_librarian.html', {'form': form, 'bookinst':book_inst})
+    return render(request, 'catalog/book_renew_librarian.html', {'form': form, 'bookinst': book_inst})
+
+
+class AuthorCreate(PermissionRequiredMixin, CreateView):
+    permission_required = 'catalog.can_mark_returned'
+    model = Author
+    fields = '__all__'
+    initial = {'date_of_death': '12/10/2016', }
+
+
+class AuthorUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = 'catalog.can_mark_returned'
+    model = Author
+    fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
+
+
+class AuthorDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = 'catalog.can_mark_returned'
+    model = Author
+    success_url = reverse_lazy('authors')
+
+
+class BookCreate(PermissionRequiredMixin, CreateView):
+    permission_required = 'catalog.can_mark_returned'
+    model = Book
+    fields = '__all__'
+
+
+class BookUpdate(PermissionRequiredMixin, UpdateView):
+    permission_required = 'catalog.can_mark_returned'
+    model = Book
+    fields = '__all__'
+
+
+class BookDelete(PermissionRequiredMixin, DeleteView):
+    permission_required = 'catalog.can_mark_returned'
+    model = Book
+    success_url = reverse_lazy('books')
